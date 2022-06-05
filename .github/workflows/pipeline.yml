@@ -35,4 +35,5 @@ jobs:
           heroku_email: "ottanh@utu.fi"
           healthcheck: "https://pokedex322.herokuapp.com/health"
           checkstring: "ok"
+          rollbackonhealthcheckfailed: true
       
