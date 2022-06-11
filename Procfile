@@ -1,1 +1,1 @@
-web: npm run aa
+web: npm run start-prod
