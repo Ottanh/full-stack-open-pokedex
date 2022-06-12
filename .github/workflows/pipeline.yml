@@ -48,8 +48,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - name : Commit messages
-        run: echo "$COMMIT_MESSAGES"
       - name : Commit messages contains
         run: echo ${{ !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
       - name: Bump version and push tag
