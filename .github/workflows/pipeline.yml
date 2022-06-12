@@ -33,7 +33,7 @@ jobs:
       - name: deploy
         env:
           COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-        if: ${{ github.event_name == 'push' }} && !contains(join($COMMIT_MESSAGES), '#SKIP')
+        if: ${{ github.event_name == 'push' }} && && ${{ !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
@@ -47,13 +47,13 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-    if: ${{ github.event_name == 'push' }} && !contains(join($COMMIT_MESSAGES), '#SKIP')
+    if: ${{ github.event_name == 'push' }} && ${{ !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
     steps:
       - uses: actions/checkout@v3
       - name : Commit messages
         run: echo "$COMMIT_MESSAGES"
       - name : Commit messages contains
-        run: echo ${{ contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
+        run: echo ${{ !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' }}
         uses: anothrNick/github-tag-action@1.36.0
