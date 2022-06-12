@@ -53,7 +53,7 @@ jobs:
       - name : Commit messages
         run: echo "$COMMIT_MESSAGES"
       - name : Commit messages contains
-        run: echo contains(join($COMMIT_MESSAGES), '#SKIP')
+        run: echo ${{ contains(join($COMMIT_MESSAGES), '#SKIP') }}
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' }}
         uses: anothrNick/github-tag-action@1.36.0
