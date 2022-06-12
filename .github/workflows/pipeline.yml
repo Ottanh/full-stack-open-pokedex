@@ -7,6 +7,9 @@ on:
   pull_request:    
     branches: [master]    
     types: [opened, synchronize]
+    
+env:
+  COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
 
 jobs:
   simple_deployment_pipeline:
@@ -31,8 +34,6 @@ jobs:
           start: npm run start-prod
           wait-on: http://localhost:5000
       - name: deploy
-        env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
         if: ${{ github.event_name == 'push' }} && ${{ !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
@@ -45,8 +46,6 @@ jobs:
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
-    env:
-      COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
     if: ${{ github.event_name == 'push' }} && ${{ !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
     steps:
       - uses: actions/checkout@v3
