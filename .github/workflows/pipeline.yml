@@ -46,7 +46,6 @@ jobs:
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' && !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
     steps:
       - uses: actions/checkout@v3
       - name : Commit messages
@@ -54,7 +53,7 @@ jobs:
       - name : Commit messages contains
         run: echo ${{ !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
       - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && !contains(join(env.COMMIT_MESSAGES), '#SKIP') }}
         uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
